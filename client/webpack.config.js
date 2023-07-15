@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
-// const { InjectManifest } = require('workbox-webpack-plugin');
+const { InjectManifest } = require('workbox-webpack-plugin');
 const { GenerateSW }= require('workbox-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
@@ -26,8 +26,12 @@ module.exports = () => {
         title: 'Text editor',
       }),
 
-      new GenerateSW(),
-      new MiniCssExtractPlugin(),
+      new InjectManifest({
+        swSrc: './src-sw.js',
+        swDest: '/src-sw.js',
+      }),
+      // new GenerateSW(),
+      // new MiniCssExtractPlugin(),
       new WebpackPwaManifest({
 
         name: 'Just Another Text Editor',
@@ -36,7 +40,7 @@ module.exports = () => {
           {
           src: path.resolve('src/images/logo.png'),
           sizes: [96,128,192,256,384,512],
-          destination: path.join('dist','icons'),
+          destination: path.join('assets','icons'),
           }
         ],
         orientation: 'portrait',
@@ -52,7 +56,7 @@ module.exports = () => {
       rules: [
         {
           test: /\.css$/i,
-          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+          use: ['style-loader', 'css-loader'],
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -65,6 +69,7 @@ module.exports = () => {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env'],
+            plugins:['@babel/plugin-proposal-object-rest-spread', '@babel/transform-runtime'],
           },
         },
         },
