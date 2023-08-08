@@ -28,7 +28,7 @@ module.exports = () => {
 
       new InjectManifest({
         swSrc: './src-sw.js',
-        swDest: '/src-sw.js',
+        swDest: 'src-sw.js',
       }),
       // new GenerateSW(),
       // new MiniCssExtractPlugin(),
@@ -43,8 +43,6 @@ module.exports = () => {
           destination: path.join('assets','icons'),
           }
         ],
-        orientation: 'portrait',
-        display: 'standalone',
         start_url: '/',
         publicPath:'/',
         fingerprints: false,
@@ -59,12 +57,8 @@ module.exports = () => {
           use: ['style-loader', 'css-loader'],
         },
         {
-          test: /\.(png|svg|jpg|jpeg|gif)$/i,
-          type: 'asset/resource',
-        },
-        {
         test:/\.m?js$/,
-        exclude: /(node_modules|bower_componets)/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
